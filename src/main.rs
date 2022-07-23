@@ -8,7 +8,7 @@ fn main() -> Result<(), Error> {
 
     _ = client.batch_execute(
         "
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS app_user (
             id              SERIAL PRIMARY KEY,
             username        VARCHAR UNIQUE NOT NULL,
             password        VARCHAR NOT NULL,
@@ -16,6 +16,24 @@ fn main() -> Result<(), Error> {
             )
     ",
     );
+
+    let res = client
+        .execute(
+            "INSERT INTO app_user (username, password, email) VALUES ($1, $2, $3)",
+            &[&"user1", &"mypass", &"user@test.com"],
+        )
+        .unwrap();
+
+    client.execute(
+        "INSERT INTO app_user (username, password, email) VALUES ($1, $2, $3)",
+        &[&"user2", &"mypass2", &"use2@gmail.com"],
+    )?;
+    client.execute(
+        "INSERT INTO app_user (username, password, email) VALUES ($1, $2, $3)",
+        &[&"user3", &"anotherpass", &"mister3@test.com"],
+    )?;
+
+    dbg!(res);
 
     Ok(())
 }
