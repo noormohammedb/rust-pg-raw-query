@@ -1,3 +1,7 @@
+/*
+this code wrote with refering below blog
+https://tms-dev-blog.com/postgresql-database-with-rust-how-to/
+ */
 use postgres::{Client, Error, NoTls};
 
 fn main() -> Result<(), Error> {
@@ -53,5 +57,10 @@ fn main() -> Result<(), Error> {
         dbg!(id, username, password, email);
         println!();
     }
+
+    client.execute(
+        "UPDATE app_user SET username=$1 WHERE id=$2",
+        &[&"jack2", &3.to_owned()],
+    )?;
     Ok(())
 }
